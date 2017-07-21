@@ -13,7 +13,7 @@ exports.App = class App {
             anomalies: 'Anomalies',
             monsters: 'Monsters'
         }
-        this.picking = true;
+        this.picking = false;
         this.difficulty = 0;
         this.props = {
             difficulty:  [1,2,3,4,5,6,7,8,9,10,11],
@@ -73,7 +73,7 @@ exports.App = class App {
                     {id: 'tsn-carrier', description: 'TSN Carrier', src:"assets/TSN_Medium_Carrier.png"},
                     {id: 'tsn-mine', description: 'TSN Mine Layer', src:"assets/TSN_Mine_Layer.png"},
                     {id: 'tsn-juggernaut', description: 'TSN Juggernaut', src:"assets/TSN_Juggernaut_Pic.png"}            
-        ]},
+                ]},
                 {id: 'ximni', description: 'Ximni', ships: [
                     {id: 'ximni-light', description: 'Ximni Light Cruiser', src:"assets/Ximni_Light_Cruiser.png"},
                     {id: 'ximni-scout', description: 'Ximni Scout', src:"assets/Ximni_Scout.png"},
@@ -81,7 +81,13 @@ exports.App = class App {
                     {id: 'ximni-missle', description: 'Ximni Missle Cruiser', src:"assets/Ximni_Missile_Cruiser.png"},
                     {id: 'ximni-dreadnought', description: 'Ximini Dreadnought', src:"assets/Ximni_Dreadnought.png"},
                     {id: 'ximni-carrier', description: 'Ximni Carrier', src:"assets/Ximni_Carrier.png"}
-                ]},   
+                ]},
+                , 
+                {"id": "pirate", "description": "Pirate", "ships": [
+                    {"id": "pirate-light", "description": "Pirate Strongbow Cruiser", "src":"assets/Pirate_Strongbow.png"},
+                    {"id": "pirate-scout", "description": "Pirate Longbow Scout", "src":"assets/Pirate_Longbow.png"},
+                    {"id": "prate-carrier", "description": "Pirate Brigantine Carrier", "src":"assets/Pirate_Brigantine.png"}
+                ]}     
             ]
         
   
@@ -122,8 +128,8 @@ exports.App = class App {
 
 
     pick () {
-        let race = this.gaussianRandom(0,this.races.length-1);
-        let drive = this.gaussianRandom(0,this.drives.length-1);
+        let race = this.psuedoRandom(0,this.races.length-1);
+        let drive = this.psuedoRandom(0,this.drives.length-1);
         let ship = 
             this.races[race].ships[this.psuedoRandom(0, this.races[race].ships.length-1)] 
    
@@ -158,12 +164,47 @@ exports.App = class App {
         return Math.floor(start + Math.random() * (end - start + 1));
     }
 
+    createSplashScreen() {
+        // Spalsh Screen
+        let title = new createjs.Text("Artemis: Battle Randomizer", "70px Arial", "#ff7700");
+        title.x = 100;
+        title.y = 50;
+        this.splash.addChild(title);
+
+        var txt = new createjs.Text("", "24px Arial", "#ff7700");
+        txt.text = 
+`
+To set the min and max difficulty reload page using a query string.
+For example: https://randomizer-2b7d4.firebaseapp.com/index.html?min=4&max=9
+`;
+		txt.lineWidth = 850;
+		txt.lineHeight = 30;
+		txt.textBaseline = "top";
+		txt.textAlign = "left";
+		txt.y = 250;
+		txt.x = (1024 - txt.lineWidth) / 2;
+		this.splash.addChild(txt);
+
+        this.loading = new createjs.Text("Loading...", "30px Arial", "#ff7700");
+        this.loading.y =700
+        this.loading.x = 100
+        this.splash.addChild(title);
+        this.splash.addChild(this.loading);
+        
+    }
+
     createLayout() {
         this.stage = new createjs.Stage("slot");
         this.container = new createjs.Container();
         this.getReady = new createjs.Container();
+        this.splash = new createjs.Container();
+
         this.getReady.visible = false;
+        this.container.visible = false;
+
         this.getReadyText = new createjs.Text("Set your settings to...", "70px Arial", "#ff7700");
+        this.createSplashScreen();
+        
        // this.getReadyText.y = 450
       //  this.getReadyText.x = 50
 
@@ -171,7 +212,9 @@ exports.App = class App {
         this.background = new createjs.Bitmap();
         this.background.scaleX = 1.5
         this.background.scaleY = 1.5
-        this.background.alpha = 0.5
+        //this.background.alpha = 0.5
+
+        
 
         this.logo = new createjs.Bitmap();
         this.logo.x = 60
@@ -179,22 +222,25 @@ exports.App = class App {
         this.logo.scaleX = 0.5
         this.logo.scaleY = 0.5
 
-        this.stage.addChild(this.background, this.container, this.getReady);
+        this.stage.addChild(this.background, this.container, this.getReady, this.splash);
+        
         //Create a Shape DisplayObject.
         this.shipBitmap = new createjs.Bitmap();
+        this.shipBitmap.x = 50;
+        this.shipBitmap.y = -25;
        // this.shipCycle = 0;
         //this.stage.addChild(this.shipBitmap);
         //Update stage will render next frame
         
         this.shipTypeText = new createjs.Text("TSN Missile Cruiser", "50px Arial", "#ff7700");
-        this.shipTypeText.y = 400;
+        this.shipTypeText.y = 430;
         this.shipTypeText.x = 25;
         //this.stage.addChild(this.shipTypeText); 
 
         this.shipDrive = new createjs.Text("Drive", "50px Arial", "#ff7700");
-        this.shipDrive.y = 460;
+        this.shipDrive.y = 480;
         this.shipDrive.x = 25;
-        this.stage.addChild(this.shipDrive); 
+        //this.container.addChild(this.shipDrive); 
         
         this.container.addChild(this.logo, this.shipBitmap, this.shipTypeText, this.shipDrive)
         
@@ -225,6 +271,7 @@ exports.App = class App {
                 return this.onClick();
             }
         }, true)
+        createjs.Ticker.addEventListener("tick", ()=> {this.handleTick()});
         this.resize()
     }
     getParams (query)  {
@@ -335,8 +382,11 @@ exports.App = class App {
         this.logo.image = evt.target.getResult('logo');
         this.background.image = evt.target.getResult('background');
 
-        createjs.Ticker.addEventListener("tick", ()=> {this.handleTick()});
+        
         this.backgroundSound = createjs.Sound.play("sound", {loop: -1});
+        this.backgroundSound.paused = true;
+        this.loading.text = "Click to continue...";
+        this.loading.alpha = 1.0;
          
         this.resize(); 
          
@@ -361,10 +411,30 @@ exports.App = class App {
                 }
             }
             this.stage.update();
+        } else if (!this.loaded) {
+            this.loading.alpha -= 0.1;
+            this.loaded = true;
+            if (this.loading.alpha < 0.3) {
+                this.loading.alpha = 1.0;
+            }
+            this.stage.update();
         }
     }
 
     onClick(evt) {
+        if (!this.loaded) {
+            return false;
+        } else if (!this.started) {
+            this.started = true;
+            this.container.visible = true;
+            this.getReady.visible=false
+
+            this.splash.visible = false;
+            this.backgroundSound.paused = false;
+            this.picking = true;
+            this.stage.update();
+            return false;
+        } 
         if (this.pickSound) {
             this.pickSound.stop();
             this.container.visible = true
@@ -383,7 +453,7 @@ exports.App = class App {
                 this.getReady.visible = false
                 createjs.Sound.play("pick-done");
             this.stage.update();})
-        }
+        } 
         return false;
     }
 

@@ -1,5 +1,5 @@
 {
-    "difficulty": [9,10,11],
+    "difficulty": [1,2,3,4,5,6,7,8,9,10,11],
     "races": [
             {"id": "tsn", "description": "TSN", "ships": [
                 {"id": "tsn-light", "description": "TSN Light Cruiser", "src":"assets/TSN_Light_Cruiser_Pic.png"},
@@ -10,7 +10,7 @@
                 {"id": "tsn-carrier", "description": "TSN Carrier", "src":"assets/TSN_Medium_Carrier.png"},
                 {"id": "tsn-mine", "description": "TSN Mine Layer", "src":"assets/TSN_Mine_Layer.png"},
                 {"id": "tsn-juggernaut", "description": "TSN Juggernaut", "src":"assets/TSN_Juggernaut_Pic.png"}            
-    ]},
+        ]},
             {"id": "ximni", "description": "Ximni", "ships": [
                 {"id": "ximni-light", "description": "Ximni Light Cruiser", "src":"assets/Ximni_Light_Cruiser.png"},
                 {"id": "ximni-scout", "description": "Ximni Scout", "src":"assets/Ximni_Scout.png"},
@@ -18,7 +18,11 @@
                 {"id": "ximni-missle", "description": "Ximni Missle Cruiser", "src":"assets/Ximni_Missile_Cruiser.png"},
                 {"id": "ximni-dreadnought", "description": "Ximini Dreadnought", "src":"assets/Ximni_Dreadnought.png"},
                 {"id": "ximni-carrier", "description": "Ximni Carrier", "src":"assets/Ximni_Carrier.png"}
+        ]}, 
+            {"id": "pirate", "description": "Pirate", "ships": [
+                {"id": "pirate-light", "description": "Pirate Strongbow Cruiser", "src":"assets/Pirate_Strongbow.png"},
+                {"id": "pirate-scout", "description": "Pirate Longbow Scout", "src":"assets/Pirate_Longbow.png"},
+                {"id": "prate-carrier", "description": "Pirate Brigantine Carrier", "src":"assets/Pirate_Brigantine.png"}
             ]}   
-        ]
-    
-} 
+    ]
+ } 
