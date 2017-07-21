@@ -1,0 +1,24 @@
+{
+    "difficulty": [9,10,11],
+    "races": [
+            {"id": "tsn", "description": "TSN", "ships": [
+                {"id": "tsn-light", "description": "TSN Light Cruiser", "src":"assets/TSN_Light_Cruiser_Pic.png"},
+                {"id": "tsn-scout", "description": "TSN Scout", "src":"assets/TSN_Scout_Pic.png"},
+                {"id": "tsn-battleship", "description": "TSN Battleship", "src":"assets/TSN_Battleship_Pic.png"},
+                {"id": "tsn-missle", "description": "TSN Missle Cruiser", "src":"assets/TSN_Missile_Cruiser_Pic.png"},
+                {"id": "tsn-dreadnought", "description": "TSN Dreadnought", "src":"assets/TSN_Dreadnought_Pic.png"},
+                {"id": "tsn-carrier", "description": "TSN Carrier", "src":"assets/TSN_Medium_Carrier.png"},
+                {"id": "tsn-mine", "description": "TSN Mine Layer", "src":"assets/TSN_Mine_Layer.png"},
+                {"id": "tsn-juggernaut", "description": "TSN Juggernaut", "src":"assets/TSN_Juggernaut_Pic.png"}            
+    ]},
+            {"id": "ximni", "description": "Ximni", "ships": [
+                {"id": "ximni-light", "description": "Ximni Light Cruiser", "src":"assets/Ximni_Light_Cruiser.png"},
+                {"id": "ximni-scout", "description": "Ximni Scout", "src":"assets/Ximni_Scout.png"},
+                {"id": "ximni-battleship", "description": "Ximni Battleship", "src":"assets/Ximni_Battleship.png"},
+                {"id": "ximni-missle", "description": "Ximni Missle Cruiser", "src":"assets/Ximni_Missile_Cruiser.png"},
+                {"id": "ximni-dreadnought", "description": "Ximini Dreadnought", "src":"assets/Ximni_Dreadnought.png"},
+                {"id": "ximni-carrier", "description": "Ximni Carrier", "src":"assets/Ximni_Carrier.png"}
+            ]}   
+        ]
+    
+} 
