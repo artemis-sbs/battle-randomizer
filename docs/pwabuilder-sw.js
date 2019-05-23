@@ -1,7 +1,8 @@
 // This is the service worker with the Cache-first network
 
 const CACHE = "pwabuilder-precache";
-const precacheFiles = [
+const precacheFiles = []
+const remember = [
   /* Add an array of files to precache for your app */
   "assets/TSN_Light_Cruiser_Pic.png",
   "assets/TSN_Scout_Pic.png",
