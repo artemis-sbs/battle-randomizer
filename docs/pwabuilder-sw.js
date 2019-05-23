@@ -3,17 +3,39 @@
 const CACHE = "pwabuilder-precache";
 const precacheFiles = [
   /* Add an array of files to precache for your app */
+  "assets/TSN_Light_Cruiser_Pic.png",
+  "assets/TSN_Scout_Pic.png",
+  "assets/TSN_Battleship_Pic.png",
+  "assets/TSN_Missile_Cruiser_Pic.png",
+  "assets/TSN_Dreadnought_Pic.png",
+  "assets/TSN_Medium_Carrier.png",
+  "assets/TSN_Mine_Layer.png",
+  "assets/TSN_Juggernaut_Pic.png",
+  "assets/Ximni_Light_Cruiser.png",
+  "assets/Ximni_Scout.png",
+  "assets/Ximni_Battleship.png",
+  "assets/Ximni_Missile_Cruiser.png",
+  "assets/Ximni_Dreadnought.png",
+  "assets/Ximni_Carrier.png}",
+  "assets/Pirate_Strongbow.png",
+  "assets/Pirate_Longbow.png",
+  "assets/Pirate_Brigantine.png",
+  'assets/artemis-logo.png',
+  'assets/background.png',
+  'assets/sounds/picked.mp3',
+  'assets/sounds/pick-done.mp3', 
+  'assets/sounds/pyl-board2.mp3'
 ];
 
 self.addEventListener("install", function (event) {
-  console.log("[PWA Builder] Install Event processing");
+  console.log("Artemis Battle Randomizer Install Event processing");
 
-  console.log("[PWA Builder] Skip waiting on install");
+  console.log("Artemis Battle Randomizer Skip waiting on install");
   self.skipWaiting();
 
   event.waitUntil(
     caches.open(CACHE).then(function (cache) {
-      console.log("[PWA Builder] Caching pages during install");
+      console.log("Artemis Battle Randomizer Caching pages during install");
       return cache.addAll(precacheFiles);
     })
   );
@@ -21,7 +43,7 @@ self.addEventListener("install", function (event) {
 
 // Allow sw to control of current page
 self.addEventListener("activate", function (event) {
-  console.log("[PWA Builder] Claiming clients for current page");
+  console.log("Artemis Battle Randomizer Claiming clients for current page");
   event.waitUntil(self.clients.claim());
 });
 
@@ -54,7 +76,7 @@ self.addEventListener("fetch", function (event) {
             return response;
           })
           .catch(function (error) {
-            console.log("[PWA Builder] Network request failed and no cache." + error);
+            console.log("Artemis Battle Randomizer Network request failed and no cache." + error);
           });
       }
     )
