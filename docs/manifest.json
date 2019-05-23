@@ -2,7 +2,7 @@
     "dir": "ltr",
     "lang": "en",
     "name": "Artemis Battle Randomizer",
-    "scope": "/battle-randomizer/www/index.html",
+    "scope": "/battle-randomizer/index.html",
     "display": "browser",
     "start_url": "https://artemis-sbs.github.io/battle-randomizer/index.html",
     "short_name": "Artemis Battle Randomizer",
@@ -15,8 +15,8 @@
     "generated": true,
     "icons": [
         {
-            "src": "https://artemis-sbs.github.io/battle-randomizer/favicon44.png",
-            "sizes": "44x44"
+            "src": "https://artemis-sbs.github.io/battle-randomizer/favicon.ico",
+            "sizes": "256x256 128x128 64x64 48x48 32x32 16x16"
         }
     ]
 }
