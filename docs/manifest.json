@@ -17,6 +17,19 @@
         {
             "src": "https://artemis-sbs.github.io/battle-randomizer/favicon.ico",
             "sizes": "256x256 128x128 64x64 48x48 32x32 16x16"
+        },
+        {
+            "src": "https://artemis-sbs.github.io/battle-randomizer/icons/favicon1024.png",
+            "sizes": "1024x1024"
+        },
+        {
+            "src": "https://artemis-sbs.github.io/battle-randomizer/icons/favicon192.png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "https://artemis-sbs.github.io/battle-randomizer/icons/favicon300.png",
+            "sizes": "300x300"
         }
+
     ]
 }
