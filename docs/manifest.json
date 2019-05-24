@@ -3,7 +3,7 @@
     "lang": "en",
     "name": "Artemis Battle Randomizer",
     "scope": "/battle-randomizer/index.html",
-    "display": "browser",
+    "display": "standalone",
     "start_url": "https://artemis-sbs.github.io/battle-randomizer/index.html",
     "short_name": "Artemis Battle Randomizer",
     "theme_color": "transparent",
