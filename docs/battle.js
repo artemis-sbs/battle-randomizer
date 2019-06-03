@@ -1,7 +1,7 @@
 
 (function(exports){
 
-
+const contentSize = {width:1450, height: 810}
 exports.App = class App {
     constructor() {
         this.labels = {
@@ -167,7 +167,7 @@ exports.App = class App {
     createSplashScreen() {
         // Spalsh Screen
         let title = new createjs.Text("Artemis: Battle Randomizer", "70px Arial", "#ff7700");
-        title.x = 100;
+        title.x = 0;
         title.y = 50;
         this.splash.addChild(title);
 
@@ -187,17 +187,20 @@ For example: https://randomizer-2b7d4.firebaseapp.com/index.html?min=4&max=9
 
         this.loading = new createjs.Text("Loading...", "30px Arial", "#ff7700");
         this.loading.y =700
-        this.loading.x = 100
+        this.loading.x = (1450 - this.loading.getBounds().width) / 2;
         this.splash.addChild(title);
         this.splash.addChild(this.loading);
         
     }
 
     createLayout() {
+
         this.stage = new createjs.Stage("slot");
         this.container = new createjs.Container();
         this.getReady = new createjs.Container();
         this.splash = new createjs.Container();
+        this.holder = new createjs.Container();
+
 
         this.getReady.visible = false;
         this.container.visible = false;
@@ -222,7 +225,9 @@ For example: https://randomizer-2b7d4.firebaseapp.com/index.html?min=4&max=9
         this.logo.scaleX = 0.5
         this.logo.scaleY = 0.5
 
-        this.stage.addChild(this.background, this.container, this.getReady, this.splash);
+
+        this.holder.addChild(this.container, this.getReady, this.splash);
+        this.stage.addChild(this.background, this.holder);
         
         //Create a Shape DisplayObject.
         this.shipBitmap = new createjs.Bitmap();
@@ -432,6 +437,7 @@ For example: https://randomizer-2b7d4.firebaseapp.com/index.html?min=4&max=9
             this.splash.visible = false;
             this.backgroundSound.paused = false;
             this.picking = true;
+            this.resize()
             this.stage.update();
             return false;
         } 
@@ -463,32 +469,21 @@ For example: https://randomizer-2b7d4.firebaseapp.com/index.html?min=4&max=9
 
         this.stage.canvas.width = w;
         this.stage.canvas.height = h;
-
-        // Size with a maximum text
-        let temp = this.layout['scenarios'].value.text
-        this.layout['scenarios'].value.text = "01234567890100"
-        let content = this.container.getBounds()
-        this.layout['scenarios'].value.text = temp
-       // content.width += 100;
-       // content.height += 100;
-
-        // Simple "fit-to-screen" scaling
-        var ratio = content.width / content.height;
-        var windowRatio = w/h;
-        var scale = w/content.width;
-        if (windowRatio > ratio) {
+        let windowRatio = w/h;
+        let content = contentSize
+        let ratio = content.width / content.height;
+        let scale = w/content.width;
+        if (windowRatio >= ratio) {
             scale = h/content.height;
         }
-        this.container.scaleX = this.container.scaleY = scale;
-        this.getReady.scaleX = this.getReady.scaleY = scale;
-
-        this.container.x = (w - content.width*scale) /2
-        this.container.y = (h -content.height*scale) /2
-
-        content = this.getReady.getBounds();
-        this.getReady.x = (w - content.width*scale) /2
-        this.getReady.y = (h -content.height*scale) /2
-
+        this.holder.scaleX = 1;
+        this.holder.scaleY = 1;
+        this.holder.x = w - (content.width/2)
+        this.holder.y = h - (content.width /2)
+        this.holder.scaleX = scale;
+        this.holder.scaleY = scale;
+        this.holder.x = (w - this.holder.getBounds().width * scale) / 2;
+        this.holder.y = (h - this.holder.getBounds().height * scale) / 2;
         this.stage.update();
     }
 }

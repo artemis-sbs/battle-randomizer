@@ -3,7 +3,7 @@ var connect = require('connect'),
     http = require('http');
 
 var app = connect()
-app.use(serveStatic(__dirname+'/www'));
+app.use(serveStatic(__dirname+'/docs'));
 
 
 http.createServer(app).listen(8080);
