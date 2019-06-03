@@ -438,7 +438,7 @@ For example: https://randomizer-2b7d4.firebaseapp.com/index.html?min=4&max=9
             this.backgroundSound.paused = false;
             this.picking = true;
             this.resize()
-            this.stage.update();
+            
             return false;
         } 
         if (this.pickSound) {
@@ -453,12 +453,13 @@ For example: https://randomizer-2b7d4.firebaseapp.com/index.html?min=4&max=9
             this.pickSound = createjs.Sound.play("picked");
             this.container.visible = false;
             this.getReady.visible = true
-            this.stage.update()
+            this.resize()
             this.pickSound.on("complete", () => {
                 this.container.visible = true;
                 this.getReady.visible = false
                 createjs.Sound.play("pick-done");
-            this.stage.update();})
+                this.resize()
+            })
         } 
         return false;
     }
