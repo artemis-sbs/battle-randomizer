@@ -6,7 +6,7 @@ template.innerHTML = `
 <style>
     :host {
         display: block;
-        font-family: "Aria";
+        font-family: "Arial";
         text-align: left;
         color: #ff7700;
     }
