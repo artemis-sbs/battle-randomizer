@@ -465,8 +465,8 @@ For example: https://randomizer-2b7d4.firebaseapp.com/index.html?min=4&max=9
     }
 
     resize() {
-        let w = window.innerWidth;
-        let h = window.innerHeight;
+        let w = 640; // window.innerWidth;
+        let h = 480; // window.innerHeight;
 
         this.stage.canvas.width = w;
         this.stage.canvas.height = h;
