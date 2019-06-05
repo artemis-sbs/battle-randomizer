@@ -2,68 +2,7 @@ import "./bat-board.js"
 import "./bat-splash.js"
 import "./bat-picked.js"
 import { BattleModel } from './bat-model.js'
-
-
-
-
-class SoundManager {
-    constructor(urls) {
-       this.manifest = [{id: 'picked', url: 'assets/sounds/picked.ogg'},
-       {id: 'pick-done', url: 'assets/sounds/pick-done.ogg'},
-       {id: 'picking', url: 'assets/sounds/pyl-board2.ogg'}]
-    }
-
-    async  init() {
-        this.buffers = {}
-        this.decoded = false
-        for await (let item of this.manifest) {
-            this.buffers[item.id] = await this.load(item.url)
-        }
-    }
-    async decode() {
-        if (this.decoded) {
-            return
-        }
-        this.context = new AudioContext()
-        for await (let kv of Object.entries(this.buffers)) {
-            this.buffers[kv[0]] = await this.context.decodeAudioData(kv[1])
-        }
-        this.decoded = true;
-    }
-    
-    async play(id, loop, cb){
-        
-        if (this.current) {
-           await this.current.stop()
-        } else {
-            await this.decode()
-        }
-        try {
-        let source = this.context.createBufferSource();
-        source.loop = loop
-        source.buffer = this.buffers[id]
-        source.connect(this.context.destination);
-        
-        this.current = source
-        if (cb) {
-            source.addEventListener('ended', cb)
-        }
-        source.start(0)
-        }
-        catch (e) {
-            console.log('Freaking sound')
-        }
-    }
-    async  load(url) {
-        var myRequest = new Request(url);
-        let response = await fetch(myRequest)
-        return await response.arrayBuffer();
-        
-    }
-}
-
-
-
+import { SoundManager } from './sound-manager.js'
 
 
 
@@ -74,20 +13,45 @@ template.innerHTML = `
 <style>
     :host {
         display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 0;
-            margin: 0;
-            background-image: url('assets/background.png');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+        height: 100%;
+        width: 100%;
+        display: flex;  
+        flex-flow: row wrap;
+        padding: 0;
+        margin: 0;
+        background-image: url('assets/background.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    #content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: calc(100% - 26px);
+        padding: 0;
+        margin: 0;
+        margin-top: 25px;
+    }
+    #header {
+        flex: 1 100%;
+        display: flex;
+        flex-direction: row;
+        color: white;
+        width: 100%;
+        height: 25px;
+        padding: 0;
+        margin: 0;
     }
     </style>
-    <div id="host">
+    <div id="header">
+        <span>Header</span>
+        <span>test</span>
+    </div>
+    <div id="content">
         <bat-splash id="splash"></bat-splash>
-    <div>
+    </div>
 `
 
 const STATE_SPLASH_LOADING = 0
@@ -104,22 +68,25 @@ class BattleApp extends HTMLElement {
         super()
         this.model = new BattleModel();
         this.root = this.attachShadow({ mode: 'open' });
-        
+
         this.root.appendChild(template.content.cloneNode(true));
-        this.host = this.root.querySelector('#host')
+        this.content = this.root.querySelector('#content')
         this.state = STATE_SPLASH_LOADING
 
     }
     connectedCallback() {
-        let splash  = this.host.querySelector('#splash');
-        this.sounds = new SoundManager();
-        this.sounds.init().then(()=>{
+        let splash = this.content.querySelector('#splash');
+
+        this.sounds = new SoundManager([{ id: 'picked', url: 'assets/sounds/picked.ogg' },
+        { id: 'pick-done', url: 'assets/sounds/pick-done.ogg' },
+        { id: 'picking', url: 'assets/sounds/pyl-board2.ogg' }]);
+        this.sounds.init().then(() => {
             splash.loaded()
             this.state = STATE_SPLASH_LOADED
             this.endSplash()
         })
         this.resize()
-        window.addEventListener('resize', ()=> this.resize())
+        window.addEventListener('resize', () => this.resize())
     }
 
     allowClick() {
@@ -127,30 +94,30 @@ class BattleApp extends HTMLElement {
         if (this.clickable) {
             return;
         }
-        this.addEventListener('mousedown', () => this.endSplash())
+        this.content.addEventListener('mousedown', () => this.endSplash())
         this.clickable = true
     }
 
     resize() {
         let w = window.innerWidth;
-        let h = window.innerHeight;
-        const contentSize = {width:1450, height: 810}
+        let h = window.innerHeight - 100;
+        const contentSize = { width: 1450, height: 810 }
 
-        let windowRatio = w/h;
+        let windowRatio = w / h;
         let content = contentSize
         let ratio = content.width / content.height;
-        let scale = w/content.width;
+        let scale = w / content.width;
         if (windowRatio >= ratio) {
-            scale = h/content.height;
+            scale = h / content.height;
         }
-        this.host.style.transform = `scale(${scale})`
+        this.content.style.transform = `scale(${scale})`
     }
 
     disallowClick() {
         if (!this.clickable) {
             return;
         }
-        this.removeEventListener('clickdown', () => this.endSplash())
+        this.content.removeEventListener('clickdown', () => this.endSplash())
         this.clickable = false
     }
     allowTick() {
@@ -171,8 +138,8 @@ class BattleApp extends HTMLElement {
     }
 
     activateBoard() {
-        this.host.innerHTML = `<bat-board id="board"></bat-board>`
-        this.board = this.host.querySelector('#board');
+        this.content.innerHTML = `<bat-board id="board"></bat-board>`
+        this.board = this.content.querySelector('#board');
     }
     shuffleBoard() {
         this.board.pick = this.model.pick()
@@ -180,7 +147,7 @@ class BattleApp extends HTMLElement {
 
     playPickSound() {
         let me = this
-        this.sounds.play('picked', false, ()=> {
+        this.sounds.play('picked', false, () => {
             me.endSplash();
         });
     }
@@ -210,7 +177,7 @@ class BattleApp extends HTMLElement {
             this.allowTick()
 
         } else if (this.state === STATE_PICKING) {
-            this.host.innerHTML = `<bat-picked></bat-picked>`
+            this.content.innerHTML = `<bat-picked></bat-picked>`
             this.disallowTick()
             this.playPickSound()
             this.state = STATE_PICKED
