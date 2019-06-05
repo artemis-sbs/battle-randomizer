@@ -115,7 +115,8 @@ class BattleApp extends HTMLElement {
         this.sounds = new SoundManager();
         this.sounds.init().then(()=>{
             splash.loaded()
-            this.allowClick()
+            this.state = STATE_SPLASH_LOADED
+            this.endSplash()
         })
         this.resize()
         window.addEventListener('resize', ()=> this.resize())
@@ -198,6 +199,9 @@ class BattleApp extends HTMLElement {
         if (this.state === STATE_SPLASH_LOADING) {
             this.state = STATE_SPLASH_LOADED
         } else if (this.state === STATE_SPLASH_LOADED) {
+            this.state = STATE_START_PICKING
+            this.allowClick()
+        } else if (this.state === STATE_START_PICKING) {
             this.activateBoard();
             this.shuffleBoard();
             this.state = STATE_PICKING
