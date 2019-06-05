@@ -2,10 +2,14 @@
 
 const CACHE = "pwabuilder-precache";
 const precacheFiles = [
-  "battle.js",
   "index.html",
   "favicon.ico",
-  "lib/createjs.min.js"
+  "bat-app.js",
+  "bat-board.js",
+  "bat-model.js",
+  "bat-picked.js",
+  "bat-settings.js",
+  "bat-splash.js",
 ]
 const remember = [
   /* Add an array of files to precache for your app */
