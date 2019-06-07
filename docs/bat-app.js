@@ -1,6 +1,7 @@
 import "./bat-board.js"
 import "./bat-splash.js"
 import "./bat-picked.js"
+import "./bat-settings.js"
 import { BattleModel } from './bat-model.js'
 import { SoundManager } from './sound-manager.js'
 
@@ -24,8 +25,8 @@ template.innerHTML = `
         background-repeat: no-repeat;
         background-size: cover;
     }
-    #content {
-        display: flex;
+    .content {
+        display: none;
         align-items: center;
         justify-content: center;
         width: 100%;
@@ -44,13 +45,38 @@ template.innerHTML = `
         padding: 0;
         margin: 0;
     }
+    .cat_circle {
+        margin: 3px;
+        border: 3px solid #7E9CC2;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .cat_circle img {
+        width: 80%;
+        height: auto;
+      }
+     
+      .active_tab {
+        display: flex
+    }
     </style>
     <div id="header">
-        <span>Header</span>
-        <span>test</span>
+    <span class="cat_circle">
+        <img src="icons/favicon24.png">
+    </span>
+    
+        
     </div>
-    <div id="content">
+    <div id="content" class="content active_tab" >
         <bat-splash id="splash"></bat-splash>
+    </div>
+    <div id="settingsHolder" class="content" >
+        <bat-settings id="settings"></bat-settings>
     </div>
 `
 
@@ -71,7 +97,11 @@ class BattleApp extends HTMLElement {
 
         this.root.appendChild(template.content.cloneNode(true));
         this.content = this.root.querySelector('#content')
+        this.settingsHolder = this.root.querySelector('#settingsHolder')
+        this.settings = this.root.querySelector('#settings')
         this.state = STATE_SPLASH_LOADING
+        this.header = this.root.querySelector('#header')
+        this.header.addEventListener('mouseup', () => this.toggle())
 
     }
     connectedCallback() {
@@ -87,6 +117,26 @@ class BattleApp extends HTMLElement {
         })
         this.resize()
         window.addEventListener('resize', () => this.resize())
+    }
+
+    toggle() {
+        if (this.settingsHolder.classList.contains('active_tab')) {
+            this.model.disabledItems = this.settings.disabledItems
+            this.model.difficulty = this.settings.difficulty
+            this.model.save()
+            this.model.reset();
+
+            this.settingsHolder.classList.remove("active_tab");
+            this.content.classList.add("active_tab");
+        } else {
+            this.settings.disabledItems = this.model.disabledItems
+            this.settings.difficulty = this.model.difficulty
+            this.settings.render();
+
+            this.content.classList.remove("active_tab");
+            this.settingsHolder.classList.add("active_tab");
+            
+        }
     }
 
     allowClick() {

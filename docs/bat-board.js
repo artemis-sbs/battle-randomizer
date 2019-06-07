@@ -1,5 +1,3 @@
-import { BattleModel } from './bat-model.js'
-
 const template = document.createElement('template');
 template.innerHTML = `
 
@@ -96,7 +94,6 @@ class BattleBoard extends HTMLElement {
         super()
         this.root = this.attachShadow({ mode: 'open' });
 
-
         this.root.appendChild(template.content.cloneNode(true));
         this.itemList = this.root.querySelector('#list');
         this.shipType = this.root.querySelector('#ship_type');
@@ -115,11 +112,8 @@ class BattleBoard extends HTMLElement {
             let value = document.createElement('div');
             value.className = 'item_value'
             label.innerHTML = BattleBoard.labels[kv[0]];
-            if (index != 0) {
-                value.innerHTML = BattleModel.props[kv[0]][kv[1]].description;
-            } else {
-                value.innerHTML = BattleModel.props[kv[0]][kv[1]];
-            }
+            value.innerHTML = this.pick.settings[kv[0]]
+            
 
 
             row.appendChild(label);
@@ -127,10 +121,10 @@ class BattleBoard extends HTMLElement {
 
             this.itemList.appendChild(row);
         });
-        this.shipType.innerHTML = this.pick.ship.description
-        this.shipDrive.innerHTML = BattleModel.drives[this.pick.drive].description
+        this.shipType.innerHTML = this.pick.ship
+        this.shipDrive.innerHTML = this.pick.drive
         
-        this.shipImage.style.backgroundImage =  `url(${this.pick.ship.src})`;
+        this.shipImage.style.backgroundImage =  `url(${this.pick.src})`;
     }
 
     render() {

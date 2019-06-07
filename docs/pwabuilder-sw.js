@@ -38,10 +38,10 @@ const remember = [
 ];
 
 self.addEventListener("install", function (event) {
-  console.log("Artemis Battle Randomizer Install Event processing");
+  // console.log("Artemis Battle Randomizer Install Event processing");
 
-  console.log("Artemis Battle Randomizer Skip waiting on install");
-  self.skipWaiting();
+  // console.log("Artemis Battle Randomizer Skip waiting on install");
+  // self.skipWaiting();
 
   event.waitUntil(
     caches.open(CACHE).then(function (cache) {
