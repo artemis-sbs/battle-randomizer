@@ -13,6 +13,8 @@ template.innerHTML = `
 
 <style>
     :host {
+    }
+    .main {
         display: flex;
         height: 100%;
         width: 100%;
@@ -24,16 +26,17 @@ template.innerHTML = `
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
+
     }
     .content {
         display: none;
         align-items: center;
         justify-content: center;
         width: 100%;
-        height: calc(100% - 26px);
+        height: 100%
         padding: 0;
         margin: 0;
-        margin-top: 25px;
+        {border-style: dotted;}
     }
     #header {
         flex: 1 100%;
@@ -41,7 +44,7 @@ template.innerHTML = `
         flex-direction: row;
         color: white;
         width: 100%;
-        height: 25px;
+        height: 40px;
         padding: 0;
         margin: 0;
     }
@@ -65,18 +68,18 @@ template.innerHTML = `
         display: flex
     }
     </style>
-    <div id="header">
-    <span class="cat_circle">
-        <img src="icons/favicon24.png">
-    </span>
-    
-        
-    </div>
-    <div id="content" class="content active_tab" >
-        <bat-splash id="splash"></bat-splash>
-    </div>
-    <div id="settingsHolder" class="content" >
-        <bat-settings id="settings"></bat-settings>
+    <div class="main">
+        <div id="header">
+            <span class="cat_circle">
+                <img src="icons/favicon24.png">
+            </span>
+        </div>
+        <div id="content" class="content active_tab" >
+            <bat-splash id="splash"></bat-splash>
+        </div>
+        <div id="settingsHolder" class="content" >
+            <bat-settings id="settings"></bat-settings>
+        </div>
     </div>
 `
 
