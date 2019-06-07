@@ -33,10 +33,9 @@ template.innerHTML = `
         align-items: center;
         justify-content: center;
         width: 100%;
-        height: 100%
+        height: 100%;
         padding: 0;
         margin: 0;
-        {border-style: dotted;}
     }
     #header {
         flex: 1 100%;
@@ -104,7 +103,18 @@ class BattleApp extends HTMLElement {
         this.settings = this.root.querySelector('#settings')
         this.state = STATE_SPLASH_LOADING
         this.header = this.root.querySelector('#header')
-        this.header.addEventListener('mouseup', () => this.toggle())
+        
+        this.root.addEventListener('mousedown', (e) => {
+            console.log(`mouse: ${e.clientX} ${e.clientY}`)
+            if (e.clientX < 45 && e.clientY < 45) {
+                this.toggle()
+            }  else {if (this.clickable) {
+                this.endSplash();
+            }}
+            
+        })
+
+
 
     }
     connectedCallback() {
@@ -143,17 +153,12 @@ class BattleApp extends HTMLElement {
     }
 
     allowClick() {
-
-        if (this.clickable) {
-            return;
-        }
-        this.content.addEventListener('mousedown', () => this.endSplash())
         this.clickable = true
     }
 
     resize() {
         let w = window.innerWidth;
-        let h = window.innerHeight - 100;
+        let h = window.innerHeight;
         const contentSize = { width: 1450, height: 810 }
 
         let windowRatio = w / h;
@@ -170,7 +175,6 @@ class BattleApp extends HTMLElement {
         if (!this.clickable) {
             return;
         }
-        this.content.removeEventListener('clickdown', () => this.endSplash())
         this.clickable = false
     }
     allowTick() {
