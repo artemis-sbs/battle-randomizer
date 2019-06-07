@@ -25,8 +25,14 @@ export class SoundManager {
         this.decoded = true;
     }
 
-    async play(id, loop, cb) {
+    async stop() {
+        if (this.current) {
+            await this.current.stop()
+        } 
+        this.current = undefined;
+    }
 
+    async play(id, loop, cb) {
         if (this.current) {
             await this.current.stop()
         } else {

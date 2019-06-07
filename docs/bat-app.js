@@ -108,9 +108,9 @@ class BattleApp extends HTMLElement {
             console.log(`mouse: ${e.clientX} ${e.clientY}`)
             if (e.clientX < 45 && e.clientY < 45) {
                 this.toggle()
-            }  else {if (this.clickable) {
+            }  else if (this.clickable) {
                 this.endSplash();
-            }}
+            }
             
         })
 
@@ -138,12 +138,18 @@ class BattleApp extends HTMLElement {
             this.model.difficulty = this.settings.difficulty
             this.model.save()
             this.model.reset();
-
+            
+            
             this.settingsHolder.classList.remove("active_tab");
             this.content.classList.add("active_tab");
+            this.allowClick();
         } else {
             this.settings.disabledItems = this.model.disabledItems
             this.settings.difficulty = this.model.difficulty
+            this.disallowClick();
+            this.disallowTick();
+            this.sounds.stop();
+            
             this.settings.render();
 
             this.content.classList.remove("active_tab");
@@ -252,8 +258,10 @@ class BattleApp extends HTMLElement {
             this.allowClick()
             this.allowTick()
         } else if (this.state === STATE_SETTINGS) {
-
+            this.state = STATE_START_PICKING
+            this.allowClick()
         }
+
 
     }
 }
