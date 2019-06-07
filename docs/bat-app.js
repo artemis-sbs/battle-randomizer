@@ -103,15 +103,15 @@ class BattleApp extends HTMLElement {
         this.settings = this.root.querySelector('#settings')
         this.state = STATE_SPLASH_LOADING
         this.header = this.root.querySelector('#header')
-        
+
         this.root.addEventListener('mousedown', (e) => {
             console.log(`mouse: ${e.clientX} ${e.clientY}`)
             if (e.clientX < 45 && e.clientY < 45) {
                 this.toggle()
-            }  else if (this.clickable) {
+            } else if (this.clickable) {
                 this.endSplash();
             }
-            
+
         })
 
 
@@ -138,8 +138,8 @@ class BattleApp extends HTMLElement {
             this.model.difficulty = this.settings.difficulty
             this.model.save()
             this.model.reset();
-            
-            
+
+
             this.settingsHolder.classList.remove("active_tab");
             this.content.classList.add("active_tab");
             this.allowClick();
@@ -149,12 +149,12 @@ class BattleApp extends HTMLElement {
             this.disallowClick();
             this.disallowTick();
             this.sounds.stop();
-            
+
             this.settings.render();
 
             this.content.classList.remove("active_tab");
             this.settingsHolder.classList.add("active_tab");
-            
+
         }
     }
 
@@ -163,18 +163,20 @@ class BattleApp extends HTMLElement {
     }
 
     resize() {
-        let w = window.innerWidth;
-        let h = window.innerHeight;
-        const contentSize = { width: 1450, height: 810 }
-
-        let windowRatio = w / h;
-        let content = contentSize
-        let ratio = content.width / content.height;
-        let scale = w / content.width;
-        if (windowRatio >= ratio) {
-            scale = h / content.height;
+        if (this.board) {
+            let w = window.innerWidth;
+            let h = window.innerHeight;
+            const contentSize = { width: 1450, height: 810 }
+            let windowRatio = w / h;
+            let content = contentSize
+            let ratio = content.width / content.height;
+            let scale = w / content.width;
+            if (windowRatio >= ratio) {
+                scale = h / content.height;
+            }
+            this.board.style.transform = `scale(${scale})`
         }
-        this.content.style.transform = `scale(${scale})`
+        
     }
 
     disallowClick() {
@@ -203,6 +205,7 @@ class BattleApp extends HTMLElement {
     activateBoard() {
         this.content.innerHTML = `<bat-board id="board"></bat-board>`
         this.board = this.content.querySelector('#board');
+        this.resize();
     }
     shuffleBoard() {
         this.board.pick = this.model.pick()
@@ -241,6 +244,7 @@ class BattleApp extends HTMLElement {
 
         } else if (this.state === STATE_PICKING) {
             this.content.innerHTML = `<bat-picked></bat-picked>`
+            this.board = undefined
             this.disallowTick()
             this.playPickSound()
             this.state = STATE_PICKED
